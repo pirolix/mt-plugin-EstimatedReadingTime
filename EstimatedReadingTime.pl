@@ -4,24 +4,25 @@ use strict;
 use MT 4;
 use MT::Util;
 
-use vars qw( $NAME $VERSION );
-$NAME = (split /::/, __PACKAGE__)[-1];
+use vars qw( $MYNAME $VERSION );
+$MYNAME = (split /::/, __PACKAGE__)[-1];
 $VERSION = '0.01';
 
 use base qw( MT::Plugin );
 my $plugin = __PACKAGE__->new ({
-    id => $NAME,
-    key => $NAME,
-    name => $NAME,
+    id => $MYNAME,
+    key => $MYNAME,
+    name => $MYNAME,
     version => $VERSION,
     author_name => 'Open MagicVox.net',
     author_link => 'http://www.magicvox.net/',
     doc_link => 'http://www.magicvox.net/archive/2010/11032033/',
+    plugin_link => 'http://lab.magicvox.net/trac/mt-plugins/wiki/EstimatedReadingTime',
     description => <<'HTMLHEREDOC',
 <__trans phrase="Funtion tag to estimate the time which visitor read an article.">
 HTMLHEREDOC
-    l10n_class => $NAME. '::L10N',
-    blog_config_template => 'tmpl/config.tmpl',
+    l10n_class => "${MYNAME}::L10N",
+    blog_config_template => "tmpl/$MYNAME/config.tmpl",
     settings => new MT::PluginSettings ([
         ['speed', { Default => 500, Scope => 'blog' }],
         ['cnt_title', { Default => 1, Scope => 'blog' }],
@@ -34,7 +35,7 @@ HTMLHEREDOC
     registry => {
         tags => {
             function => {
-                $NAME => \&_tag_estimated_reading_time,
+                $MYNAME => \&_tag_estimated_reading_time,
             },
         },
     },
@@ -60,7 +61,7 @@ sub _tag_estimated_reading_time {
 
     my $speed = &instance->get_config_value ('speed', $scope)
         or return ''; # divided by 0
-    my $time = int ((length $str) / $speed + 0.5); # round off
+    my $time = ((length $str) / $speed + 0.5); # round off
 
     $time
         ? sprintf &instance->get_config_value ('phrase_n', $scope) || '', $time
