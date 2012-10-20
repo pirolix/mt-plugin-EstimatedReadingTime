@@ -1,4 +1,5 @@
 package EstimatedReadingTime::L10N::ja;
+# $Id$
 
 use strict;
 use base 'EstimatedReadingTime::L10N::en_us';
